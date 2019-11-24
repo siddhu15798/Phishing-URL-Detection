@@ -42,7 +42,8 @@ Confusion_Matrix = confusion_matrix(Testing_Labels, Prediction_Labels)
 # print(Training_Labels.value_counts())
 # print(Testing_Labels.value_counts())
 # print(Confusion_Matrix)
-print("\nAccuracy Score obtained is : ",accuracy_score(Testing_Labels, Prediction_Labels))
+# print("\nAccuracy Score obtained is : ",accuracy_score(Testing_Labels, Prediction_Labels)*100.)
+print('Accuracy score obtained is {0:.2f}%'.format(accuracy_score(Testing_Labels, Prediction_Labels)*100.))
 
 Importance = Decision_Tree_Classifier.feature_importances_
 
@@ -64,12 +65,14 @@ plt.figure()
 
 plt.title("Feature importances")
 
-plt.bar(range(Training_Data.shape[1]), Importance[Indices], color="b", align="center")   
+plt.barh(range(Training_Data.shape[1]), Importance[Indices], color="b", align="center")   
 
-plt.xticks(range(Training_Data.shape[1]), Training_Data.columns[Indices])
+plt.yticks(range(Training_Data.shape[1]), Training_Data.columns[Indices])
 
-plt.xlim([-1, Training_Data.shape[1]])
+plt.ylim([-1, Training_Data.shape[1]])
 
 plt.rcParams['figure.figsize'] = (35,15)
 
 plt.show()
+
+print(Confusion_Matrix)

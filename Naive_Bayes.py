@@ -11,12 +11,6 @@ simplefilter(action='ignore', category=FutureWarning)
 
 URLS = pd.read_csv("data.csv")
 
-# Phishing_URLS = pd.read_csv("Phishing-URLS.csv")
-
-# Legitimate_URLS = pd.read_csv("Legitimate-URLS.csv")
-
-# URLS = Legitimate_URLS.append(Phishing_URLS)
-
 URLS = URLS.drop(URLS.columns[[0]], axis=1)
 
 URLS = URLS.sample(frac=1).reset_index(drop=True)
@@ -40,3 +34,11 @@ Prediction_Labels_1 = bn.fit(Training_Data, Training_Labels).predict(Testing_Dat
 print("\nAccuracy Score obtained is : ",accuracy_score(Testing_Labels, Prediction_Labels))
 
 print("\nAccuracy Score obtained is : ",accuracy_score(Testing_Labels, Prediction_Labels_1))
+
+Confusion_Matrix = confusion_matrix(Testing_Labels, Prediction_Labels)
+
+Confusion_Matrix_1 = confusion_matrix(Testing_Labels, Prediction_Labels_1)
+
+print(Confusion_Matrix)
+
+print(Confusion_Matrix_1)

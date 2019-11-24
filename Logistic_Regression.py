@@ -2,20 +2,18 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from warnings import simplefilter
-from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import GridSearchCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix,accuracy_score
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 
 simplefilter(action='ignore', category=FutureWarning)
 
+# penalty = ['l1', 'l2']
+# C = np.logspace(0, 4, 10)
+# hyperparameters = dict(C=C, penalty=penalty)
+
 URLS = pd.read_csv("data.csv")
-
-# Phishing_URLS = pd.read_csv("Phishing-URLS.csv")
-
-# Legitimate_URLS = pd.read_csv("Legitimate-URLS.csv")
-
-# URLS = Legitimate_URLS.append(Phishing_URLS)
 
 URLS = URLS.drop(URLS.columns[[0]], axis=1)
 
@@ -35,9 +33,16 @@ classifier.fit(Training_Data, Training_Labels)
 
 Prediction_Labels = classifier.predict(Testing_Data)
 
-# Confusion_Matrix = confusion_matrix(Training_Labels, Prediction_Labels)
+# clf = GridSearchCV(classifier, hyperparameters, cv=5, verbose=0)
+# best_model = clf.fit(Training_Data, Training_Labels)
+# print('Best Penalty:', best_model.best_estimator_.get_params()['penalty'])
+# print('Best C:', best_model.best_estimator_.get_params()['C'])
+# prediction = best_model.predict(Testing_Data)
+Confusion_Matrix = confusion_matrix(Training_Labels, Prediction_Labels)
 
-# print(Confusion_Matrix)
-
-print("\nAccuracy Score obtained is : ",accuracy_score(Testing_Labels, Prediction_Labels),"\n")
-
+print('Accuracy score of the Logistic Regression classifier with default hyperparameter values {0:.2f}%'.format(accuracy_score(Testing_Labels, Prediction_Labels)*100.))
+print('\n')
+print('Classification report of the Logistic Regression classifier with default hyperparameter value')
+print('\n')
+print(classification_report(Testing_Labels, Prediction_Labels, target_names=['Phishing Websites', 'Normal Websites']))
+print(Confusion_Matrix)
