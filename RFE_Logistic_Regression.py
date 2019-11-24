@@ -1,11 +1,9 @@
-import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from warnings import simplefilter
+from sklearn.feature_selection import RFE
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.feature_selection import RFE
-from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+from sklearn.metrics import confusion_matrix,accuracy_score,classification_report
 
 simplefilter(action='ignore', category=FutureWarning)
 
@@ -27,35 +25,30 @@ Training_Data, Testing_Data = train_test_split(URLS_Without_Labels, test_size = 
 
 Training_Labels, Testing_Labels = train_test_split(Labels, test_size = 0.25, random_state = 150)
 
-Model = LogisticRegression()
+Model = LogisticRegression(random_state=0)
 
 Rfe = RFE(Model, 15)
 
 Fit = Rfe.fit(Training_Data, Training_Labels)
 
-print("Num Features: %d" % Fit.n_features_)
-print("Selected Features: %s\n" % Fit.support_)
-print("Feature Ranking: %s\n" % Fit.ranking_)
-print("\n")
-print(Fit.score(Training_Data, Training_Labels))
 Prediction_Labels = Rfe.predict(Testing_Data)
+
 New_Data = Rfe.transform(URLS_Without_Labels)
 
 # print(label.shape)
 df = pd.DataFrame(New_Data)
-df.to_csv('data1.csv')
-
-# print("\nAccuracy Score obtained is : ",accuracy_score(Testing_Labels, Prediction_Labels),"\n")
-print('Accuracy score of the Logistic Regression classifier with default hyperparameter values {0:.2f}%'.format(accuracy_score(Testing_Labels, Prediction_Labels)*100.))
-print('\n')
-print('Classification report of the Logistic Regression classifier with default hyperparameter value')
-print('\n')
-print(classification_report(Testing_Labels, Prediction_Labels, target_names=['Phishing Websites', 'Normal Websites']))
+df.to_csv('RFElogreg.csv')
 
 Confusion_Matrix = confusion_matrix(Testing_Labels, Prediction_Labels)
 
-print(Confusion_Matrix)
-
+print("\nNumber Of Features: %d\n" % Fit.n_features_)
+print("Selected Features: \n%s\n" % Fit.support_)
+print("Feature Ranking: \n%s\n" % Fit.ranking_)
+print("Training Accuracy Score Obtained is: {0:.2f}%".format(Fit.score(Training_Data, Training_Labels)*100.))
+print("Testing Accuracy Score Obtained is: {0:.2f}%\n".format(accuracy_score(Testing_Labels, Prediction_Labels)*100.))
+print("Classification Report: \n",classification_report(Testing_Labels, Prediction_Labels, target_names=['Phishing Websites', 'Normal Websites']))
+print("Confusion Matrix: \n", Confusion_Matrix)
+print('\n')
 # classifier = LogisticRegression(random_state = 0)
 # classifier.fit(Training_Data, Training_Labels)
 # Prediction_Labels = classifier.predict(Testing_Data)

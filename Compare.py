@@ -5,6 +5,7 @@ from warnings import simplefilter
 from sklearn import model_selection
 from sklearn.naive_bayes import BernoulliNB
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -28,6 +29,7 @@ Scoring = 'accuracy'
 Models.append(('SVM', SVC()))
 Models.append(('NB', BernoulliNB()))
 Models.append(('LR', LogisticRegression()))
+Models.append(('KNN', KNeighborsClassifier()))
 Models.append(('RF', RandomForestClassifier()))
 Models.append(('DTC', DecisionTreeClassifier()))
 

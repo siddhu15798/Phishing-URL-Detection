@@ -5,17 +5,11 @@ from warnings import simplefilter
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix,accuracy_score
+from sklearn.metrics import confusion_matrix,accuracy_score,classification_report
 
 simplefilter(action='ignore', category=FutureWarning)
 
 URLS = pd.read_csv("data.csv")
-
-# Phishing_URLS = pd.read_csv("Phishing-URLS.csv")
-
-# Legitimate_URLS = pd.read_csv("Legitimate-URLS.csv")
-
-# URLS = Legitimate_URLS.append(Phishing_URLS)
 
 URLS = URLS.drop(URLS.columns[[0]], axis=1)
 
@@ -25,9 +19,9 @@ URLS_Without_Labels = URLS.drop('Result', axis=1)
 
 Labels = URLS['Result']
 
-Training_Data, Testing_Data = train_test_split(URLS_Without_Labels, test_size=0.30, random_state=110)
+Training_Data, Testing_Data = train_test_split(URLS_Without_Labels, test_size=0.25, random_state=150)
 
-Training_Labels, Testing_Labels = train_test_split(Labels, test_size=0.30, random_state=110)
+Training_Labels, Testing_Labels = train_test_split(Labels, test_size=0.25, random_state=150)
 
 # parameters = [{'n_estimators': [100, 700],
 #     'max_features': ['sqrt', 'log2'],
@@ -37,21 +31,18 @@ Training_Labels, Testing_Labels = train_test_split(Labels, test_size=0.30, rando
 # print("Best Accurancy =" +str( grid_search.best_score_))
 # print("best parameters =" + str(grid_search.best_params_)) 
 
-Random_Forest_Classifier = RandomForestClassifier()
+Random_Forest_Classifier = RandomForestClassifier(random_state=0)
 
 Random_Forest_Classifier.fit(Training_Data, Training_Labels)
 
 Prediction_Labels = Random_Forest_Classifier.predict(Testing_Data)
 
-Confusion_Matrix_1 = confusion_matrix(Testing_Labels, Prediction_Labels)
+Confusion_Matrix = confusion_matrix(Testing_Labels, Prediction_Labels)
 
-Custom_Random_Forest_Classifier = RandomForestClassifier(n_estimators=700, random_state=0, max_features = 'log2', criterion = "gini", max_depth=100, max_leaf_nodes=20000)
-
-Custom_Random_Forest_Classifier.fit(Training_Data, Training_Labels)
-
-Custom_Prediction_Labels = Custom_Random_Forest_Classifier.predict(Testing_Data)
-
-Confusion_Matrix_2 = confusion_matrix(Testing_Labels, Custom_Prediction_Labels)
+# Custom_Random_Forest_Classifier = RandomForestClassifier(n_estimators=700, random_state=0, max_features = 'log2', criterion = "gini", max_depth=100, max_leaf_nodes=20000)
+# Custom_Random_Forest_Classifier.fit(Training_Data, Training_Labels)
+# Custom_Prediction_Labels = Custom_Random_Forest_Classifier.predict(Testing_Data)
+# Confusion_Matrix_2 = confusion_matrix(Testing_Labels, Custom_Prediction_Labels)
 
 #print(URLS.columns)
 #print(URLS.shape)
@@ -60,12 +51,12 @@ Confusion_Matrix_2 = confusion_matrix(Testing_Labels, Custom_Prediction_Labels)
 #print(len(Training_Labels),len(Testing_Labels))
 #print(Training_Labels.value_counts())
 #print(Testing_Labels.value_counts())
-#print(Confusion_Matrix_1)
-print("\nAccuracy Score obtained is : ",accuracy_score(Testing_Labels, Prediction_Labels))
-#print(Confusion_Matrix_2)
-print("\nAccuracy Score obtained is : ",accuracy_score(Testing_Labels, Custom_Prediction_Labels))
+print("\nTraining Accuracy Score Obtained is: {0:.2f}%".format(accuracy_score(Training_Labels, Random_Forest_Classifier.predict(Training_Data))*100.))
+print("Testing Accuracy Score Obtained is: {0:.2f}%\n".format(accuracy_score(Testing_Labels, Prediction_Labels)*100.))
+print("Classification Report: \n",classification_report(Testing_Labels, Prediction_Labels, target_names=['Phishing Websites', 'Normal Websites']))
+print("Confusion Matrix: \n", Confusion_Matrix)
 
-Importance = Custom_Random_Forest_Classifier.feature_importances_
+Importance = Random_Forest_Classifier.feature_importances_
 
 Indices = np.argsort(Importance)[::-1] 
 
@@ -85,14 +76,12 @@ plt.figure()
 
 plt.title("Feature importances")
 
-plt.bar(range(Training_Data.shape[1]), Importance[Indices], color="b", align="center")   
+plt.barh(range(Training_Data.shape[1]), Importance[Indices], color="b", align="center")   
 
-plt.xticks(range(Training_Data.shape[1]), Training_Data.columns[Indices])
+plt.yticks(range(Training_Data.shape[1]), Training_Data.columns[Indices])
 
-plt.xlim([-1, Training_Data.shape[1]])
+plt.ylim([-1, Training_Data.shape[1]])
 
 plt.rcParams['figure.figsize'] = (35,15)
 
 plt.show()
-
-# a = input('Enter the url U want to test')

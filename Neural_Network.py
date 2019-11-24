@@ -73,11 +73,11 @@ Training_Labels, Testing_Labels = train_test_split(Y, test_size = 0.20, random_s
 # print(y_train.shape)
 # print(X_test.shape)
 # print(y_test.shape)
-
+simplefilter(action='ignore', category=FutureWarning)
 Model = Sequential()
 
 # Weights are initialized to small uniformly random values between 0 and 0.05.
-Model.add(Dense(60, activation='relu', kernel_initializer='uniform',input_dim=Training_Data.shape[1]))
+Model.add(Dense(45, activation='relu', kernel_initializer='uniform',input_dim=Training_Data.shape[1]))
 Model.add(Dense(30, activation='relu', kernel_initializer='uniform'))
 Model.add(Dense(1,  activation='sigmoid', kernel_initializer='uniform'))
 Model.compile(loss='binary_crossentropy', optimizer=Adam(), metrics=['accuracy'])
@@ -85,11 +85,11 @@ print(Model.summary())
 
 ES = callbacks.EarlyStopping(monitor='loss', min_delta=0.001, patience=5)
 
-Hist = Model.fit(Training_Data, Training_Labels, epochs=200, verbose=1, callbacks=[ES])
+Hist = Model.fit(Training_Data, Training_Labels, batch_size=32, epochs=200, verbose=1, callbacks=[ES])
 Prediction_Labels = Model.predict(Testing_Data)
 scores = Model.evaluate(Testing_Data, Testing_Labels)
 
-print('\nAccuracy score of the Neural Network with basic hyperparameter settings {0:.2f}%'.format(scores[1]*100))
+print('\nAccuracy score of the Neural Network with basic hyperparameter settings {0:.2f}%\n'.format(scores[1]*100))
 
 # Prediction = []
 # for i in range(len(Testing_Data)):
