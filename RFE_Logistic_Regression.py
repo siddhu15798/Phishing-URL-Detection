@@ -1,3 +1,4 @@
+import joblib
 import pandas as pd
 from warnings import simplefilter
 from sklearn.feature_selection import RFE
@@ -49,6 +50,8 @@ print("Testing Accuracy Score Obtained is: {0:.2f}%\n".format(accuracy_score(Tes
 print("Classification Report: \n",classification_report(Testing_Labels, Prediction_Labels, target_names=['Phishing Websites', 'Normal Websites']))
 print("Confusion Matrix: \n", Confusion_Matrix)
 print('\n')
+
+joblib.dump(Rfe, 'RFE_Logistic_Regression.pkl')
 # classifier = LogisticRegression(random_state = 0)
 # classifier.fit(Training_Data, Training_Labels)
 # Prediction_Labels = classifier.predict(Testing_Data)

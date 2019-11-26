@@ -84,14 +84,15 @@ Model.add(Dense(1,  activation='sigmoid', kernel_initializer='uniform'))
 Model.compile(loss='binary_crossentropy', optimizer=Adam(), metrics=['accuracy'])
 print(Model.summary())
 
-ES = callbacks.EarlyStopping(monitor='loss', min_delta=0.001, patience=5)
+Early_Stopping = callbacks.EarlyStopping(monitor='loss', min_delta=0.001, patience=5)
 
-Hist = Model.fit(Training_Data, Training_Labels, batch_size=32, epochs=200, verbose=1, callbacks=[ES])
+History = Model.fit(Training_Data, Training_Labels, batch_size=32, epochs=200, verbose=1, callbacks=[Early_Stopping])
 Prediction_Labels = Model.predict(Testing_Data)
 scores = Model.evaluate(Testing_Data, Testing_Labels)
 
 print('\nAccuracy score of the Neural Network with basic hyperparameter settings {0:.2f}%\n'.format(scores[1]*100))
 
+joblib.dump(Model, 'Neural_Network.pkl')
 # Prediction = []
 # for i in range(len(Testing_Data)):
 #     Prediction.append(Prediction_Labels[i][0])
@@ -112,4 +113,3 @@ print('\nAccuracy score of the Neural Network with basic hyperparameter settings
 # Confusion_Matrix = confusion_matrix(Testing_Labels, Prediction_Labels)
 
 # print(Confusion_Matrix)
-joblib.dump(Model, 'Neural_Networks.pkl')

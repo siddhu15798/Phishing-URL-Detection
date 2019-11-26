@@ -33,7 +33,7 @@ class Feature_Extraction:
     def Get_Path(self, url):
         return urlparse(url).path
 
-    def get_hostname_from_url(self, url):
+    def Get_Hostname_From_URL(self, url):
         hostname = url
         pattern = "https://|http://|www.|https://www.|http://www."
         pre_pattern_match = re.search(pattern, hostname)
@@ -435,7 +435,7 @@ Google_Index = []
 Links_pointing_to_page = []
 
 url = input("Enter URL you want to check \n")
-hostname = fe.get_hostname_from_url(url)
+hostname = fe.Get_Hostname_From_URL(url)
 opener = urllib.request.urlopen(url).read()
 soup = BeautifulSoup(opener, 'lxml')
 domain = fe.Get_Domain(url)
@@ -509,4 +509,4 @@ d = {'having_IP_Address':pd.Series(Having_IP),'URL_Length':pd.Series(Length_URL)
     'Statistical_report':pd.Series(Statistical_Report)}
 
 data = pd.DataFrame(d)
-data.to_csv("a.csv", index=False, encoding='UTF-8')
+data.to_csv("Check.csv", index=False, encoding='UTF-8')
