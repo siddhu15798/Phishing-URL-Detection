@@ -1,31 +1,88 @@
 from bs4 import BeautifulSoup
 import urllib.request
+import re
 from urllib.parse import urlparse, urlencode
 from urllib.error import HTTPError
 
-url = 'http://www.reo15.moe.go.th'
+url2 = 'http://www.reo15.moe.go.th'
+
+url = '116.123.34.65'
+url1 = 'http://0x58.0xCC.0xCA.0x62/2/paypal.ca/index.html'
+url3 = 'http://www.reo15.moe.go.th'
+# def Links_pointing_to_page(url):
+    
+#     count = 0
+#     try:
+#         r = urllib.request.urlopen(url)
+#         soup = BeautifulSoup(r, "html.parser")
+#         for link in soup.find_all('a'):
+#             #print(link.get('href'))
+#             count += 1
+#     except TypeError:
+#         return 1
+#     except HTTPError:
+#         return 2
+    
+#     if(count == 0):
+#         return 1 #phishing
+#     elif(count == 1):
+#         return 2 #suspicious
+#     else:
+#         return 0 #legitimate
+    
+# a = Links_pointing_to_page(url)
+# print(a)
+# ipv4_pattern = r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+# ipv6_pattern = r"^(?:(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){6})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):" \
+#                r"(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}" \
+#                r"(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:::(?:(?:(?:[0-9a-fA-F]{1,4})):){5})" \
+#                r"(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|" \
+#                r"(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|" \
+#                r"(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){4})" \
+#                r"(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|" \
+#                r"(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|" \
+#                r"(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,1}(?:(?:[0-9a-fA-F]{1,4})))?::" \
+#                r"(?:(?:(?:[0-9a-fA-F]{1,4})):){3})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|" \
+#                r"(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}" \
+#                r"(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,2}" \
+#                r"(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){2})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):" \
+#                r"(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|" \
+#                r"(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,3}" \
+#                r"(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:[0-9a-fA-F]{1,4})):)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):" \
+#                r"(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}" \
+#                r"(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,4}" \
+#                r"(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|" \
+#                r"(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|" \
+#                r"(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,5}" \
+#                r"(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,6}" \
+#                r"(?:(?:[0-9a-fA-F]{1,4})))?::))))$"
+               
+# http_https = r"https://|http://"
+
+# def Ip_Address(url):
+#         # match = re.search('(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\/)|'  #IPv4
+#         #                 '((0x[0-9a-fA-F]{1,2})\\.(0x[0-9a-fA-F]{1,2})\\.(0x[0-9a-fA-F]{1,2})\\.(0x[0-9a-fA-F]{1,2})\\/)'  #IPv4 in hexadecimal
+#         #                 '(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}',url)
+#         # if match:
+#         #     return 1
+#         # else:
+#         #     return -1
+#         ip_address_pattern = ipv4_pattern + "|" + ipv6_pattern
+#         match = re.search(ip_address_pattern, url)
+#         return 1 if match else -1
 
 
-def Links_pointing_to_page(url):
-    
-    count = 0
-    try:
-        r = urllib.request.urlopen(url)
-        soup = BeautifulSoup(r, "html.parser")
-        for link in soup.find_all('a'):
-            #print(link.get('href'))
-            count += 1
-    except TypeError:
-        return 1
-    except HTTPError:
-        return 2
-    
-    if(count == 0):
-        return 1 #phishing
-    elif(count == 1):
-        return 2 #suspicious
-    else:
-        return 0 #legitimate
-    
-a = Links_pointing_to_page(url)
+def Have_Symbol_Attherate(url):
+        if "@" in url:
+            return 1
+        else: 
+            return -1
+        
+def Redirection(url):
+        if "//" in urlparse(url).path:
+            return 1
+        else:
+            return -1
+        
+a = Redirection(url3)
 print(a)

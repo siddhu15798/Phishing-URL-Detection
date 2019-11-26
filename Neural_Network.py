@@ -1,11 +1,12 @@
-from warnings import simplefilter
+import joblib
 import numpy as np
 import pandas as pd
-from keras import callbacks
-from keras.layers import Dense
-from keras.optimizers import *
-from collections import Counter
 import matplotlib.pyplot as plt
+from keras import callbacks
+from keras.optimizers import *
+from keras.layers import Dense
+from collections import Counter
+from warnings import simplefilter
 from keras.models import Sequential
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, accuracy_score
@@ -111,3 +112,4 @@ print('\nAccuracy score of the Neural Network with basic hyperparameter settings
 # Confusion_Matrix = confusion_matrix(Testing_Labels, Prediction_Labels)
 
 # print(Confusion_Matrix)
+joblib.dump(Model, 'Neural_Networks.pkl')

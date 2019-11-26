@@ -1,3 +1,4 @@
+import joblib
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -55,6 +56,8 @@ print("\nTraining Accuracy Score Obtained is: {0:.2f}%".format(accuracy_score(Tr
 print("Testing Accuracy Score Obtained is: {0:.2f}%\n".format(accuracy_score(Testing_Labels, Prediction_Labels)*100.))
 print("Classification Report: \n",classification_report(Testing_Labels, Prediction_Labels, target_names=['Phishing Websites', 'Normal Websites']))
 print("Confusion Matrix: \n", Confusion_Matrix)
+
+joblib.dump(Random_Forest_Classifier, 'Random_Forest.pkl')
 
 Importance = Random_Forest_Classifier.feature_importances_
 
